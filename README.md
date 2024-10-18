@@ -1,1 +1,120 @@
-# portfolio_js.github.io
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>カウントダウンタイマー</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="work28.html">
+    <style>
+        body {
+        margin: 0;
+        padding: 0;
+        }
+        .container {
+        margin: 25px auto;
+        background-color: lawngreen;
+        padding: 20px;
+        text-align: center;
+        border-radius: 10px;
+        height: 250px;
+        width: 700px;
+        }
+
+        #timer {
+        color: white;
+        background: black;
+        height: 100px;
+        line-height: 100px;
+        font-size: 100px;
+        padding: 20px 0;
+        margin-top: 10px;
+        margin-bottom: 15px;
+        border-radius: 20px;
+        width: 700px;
+        }
+
+        button {
+        font-size: 30px;
+        border-radius: 10px;
+        color: white;
+        background-color: black;
+        width: 200px;
+        height: 60px;
+        padding: 0;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div id="timer">00:00.00</div>
+        <button id="start">Start</button>
+        <button id="stop" disabled>Stop</button>
+        <button id="reset" disabled>Reset</button>
+    </div>
+    <script>
+         $(document).ready(function() {
+            let milliseconds = 0;
+            let seconds = 0;
+            let minutes = 0;
+            let intervalId;
+
+            let $startButton = $("#start");
+            let $stopButton = $("#stop");
+            let $resetButton = $("#reset");
+            let $timeDisplay = $("#timer");
+
+            $startButton.on("click", startTimer);
+            $stopButton.on("click", stopTimer);
+            $resetButton.on("click", resetTimer);
+
+            function updateTimer() {
+                milliseconds += 10;
+                if (milliseconds >= 1000) {
+                    milliseconds = 0;
+                    seconds++;
+                }
+                if (seconds >= 60) {
+                    seconds = 0;
+                    minutes++;
+                }
+
+                let displayMilliseconds = milliseconds < 100 ? `0${milliseconds / 10}`.slice(-2) : milliseconds / 10;
+                let displaySeconds = seconds < 10 ? `0${seconds}` : seconds;
+                let displayMinutes = minutes < 10 ? `0${minutes}` : minutes;
+
+                $timeDisplay.text(`${displayMinutes}:${displaySeconds}.${displayMilliseconds}`);
+            }
+
+            function startTimer() {
+                intervalId = setInterval(updateTimer, 10);
+                $startButton.prop("disabled", true);
+                $stopButton.prop("disabled", false);
+                $resetButton.prop("disabled", true);            
+            }
+
+            function stopTimer() {
+                clearInterval(intervalId);
+                $startButton.prop("disabled", false);
+                $stopButton.prop("disabled", true);
+                $resetButton.prop("disabled", false);
+            }
+
+            function resetTimer() {
+                clearInterval(intervalId);
+                milliseconds = 0;
+                seconds = 0;
+                minutes = 0;
+                $timeDisplay.text("00:00.00");
+                $startButton.prop("disabled", false);
+                $stopButton.prop("disabled", true);
+                $resetButton.prop("disabled", true);
+            }
+        });
+    </script>
+</body>
+</html>
+
+
+
+        
